@@ -8,6 +8,11 @@ use AppBundle\Calculator\Mk1Calculator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class Mk1CalculatorTest
+ * @package Tests\AppBundle\Calculator
+ * @covers \AppBundle\Calculator\Mk1Calculator
+ */
 class Mk1CalculatorTest extends TestCase
 {
     /**
