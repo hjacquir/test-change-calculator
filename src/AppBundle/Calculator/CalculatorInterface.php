@@ -8,6 +8,9 @@ use AppBundle\Model\Change;
 
 interface CalculatorInterface
 {
+    const MK1_MODEL = 'mk1';
+    const MK2_MODEL = 'mk2';
+
     /**
      * @return string Indicates the model of automaton
      */

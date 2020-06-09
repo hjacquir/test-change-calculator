@@ -5,6 +5,7 @@ namespace Tests\AppBundle\Calculator;
 use AppBundle\Calculator\CalculatorInterface;
 use AppBundle\Model\Change;
 use AppBundle\Calculator\Mk1Calculator;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class Mk1CalculatorTest extends TestCase
@@ -14,9 +15,18 @@ class Mk1CalculatorTest extends TestCase
      */
     private $calculator;
 
+    /**
+     * @var Change|MockObject
+     */
+    private $change;
+
     protected function setUp()
     {
-        $this->calculator = new Mk1Calculator();
+        $this->change = $this->getMockBuilder(Change::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->calculator = new Mk1Calculator($this->change);
     }
 
     public function testGetSupportedModel()
