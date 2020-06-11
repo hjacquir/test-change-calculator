@@ -22,14 +22,14 @@ class CalculatorRegistry implements CalculatorRegistryInterface
     private $calculators = [];
 
     /**
-     * CalculatorRegistry constructor.
-     * @param CalculatorInterface[] $calculators
+     * @param CalculatorInterface $calculator
      */
-    public function __construct(array $calculators)
+    public function addCalculator(CalculatorInterface $calculator)
     {
-        $this->calculators = $calculators;
+        if (!in_array($calculator, $this->calculators)) {
+            array_push($this->calculators, $calculator);
+        }
     }
-
 
     /**
      * @param string $model Indicates the model of automaton

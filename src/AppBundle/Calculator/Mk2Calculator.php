@@ -9,6 +9,16 @@
 namespace AppBundle\Calculator;
 
 use AppBundle\Model\Change;
+use AppBundle\Strategy\Strategy;
+use AppBundle\Strategy\AmountEqual10Strategy;
+use AppBundle\Strategy\AmountSuperior10Strategy;
+use AppBundle\Strategy\AmountModulo10RestNotZero;
+use AppBundle\Strategy\AmountEqualTo5;
+use AppBundle\Strategy\AmountIn5To10IntervallAndMultiple2;
+use AppBundle\Strategy\AmountIn5To10IntervallAndNotMultiple2;
+use AppBundle\Strategy\AmountModulo5RestMultipleOf2;
+use AppBundle\Strategy\AmountInferiorTo5AndMultiple2;
+use AppBundle\Strategy\AmountInferiorTo5AndNotMultiple2;
 
 /**
  * Class Mk2Calculator
@@ -22,24 +32,6 @@ class Mk2Calculator implements CalculatorInterface
      * @var Change
      */
     private $change;
-
-    /**
-     * @var array
-     * @todo ecapsulate in object and inject
-     */
-    private $coin2Collector = [];
-
-    /**
-     * @var array
-     * @todo ecapsulate in object and inject
-     */
-    private $bill5Collector = [];
-
-    /**
-     * @var array
-     * @todo ecapsulate in object and inject
-     */
-    private $bill10Collector = [];
 
     /**
      * Mk2Calculator constructor.
@@ -65,105 +57,49 @@ class Mk2Calculator implements CalculatorInterface
      */
     public function getChange(int $amount): ?Change
     {
-        $this->collectCoin2($amount);
-        $this->collectBill5($amount);
-        $this->collectBill10($amount);
+        // @todo avoid to do new here encapsulate all into a Processor object and inject it
+        $amountSuperior10Strategy = new AmountSuperior10Strategy($amount);
+        $amountEqualTo5 = new AmountEqualTo5($amount);
+        $amountIn5To10IntervallAndMultiple2 = new AmountIn5To10IntervallAndMultiple2($amount);
+        $amountIn5To10IntervallAndNotMultiple2 = new AmountIn5To10IntervallAndNotMultiple2($amount);
+        $amountInferiorTo5AndMultiple2 = new AmountInferiorTo5AndMultiple2($amount);
+        $amountInferiorTo5AndNotMultiple2 = new AmountInferiorTo5AndNotMultiple2($amount);
 
-        if (in_array(self::OPERATION_IMPOSSIBLE, $this->coin2Collector)) {
+        $amountModulo10RestNotZero = new AmountModulo10RestNotZero($amountSuperior10Strategy);
+        $amountModulo10RestNotZero->attach($amountEqualTo5);
+        $amountModulo10RestNotZero->attach($amountIn5To10IntervallAndMultiple2);
+        $amountModulo10RestNotZero->attach($amountIn5To10IntervallAndNotMultiple2);
+        $amountModulo10RestNotZero->attach($amountInferiorTo5AndMultiple2);
+        $amountModulo10RestNotZero->attach($amountInferiorTo5AndNotMultiple2);
+
+        $amountModulo5RestMultipleOf2 = new AmountModulo5RestMultipleOf2($amountIn5To10IntervallAndNotMultiple2);
+        $amountModulo5RestMultipleOf2->attach($amountInferiorTo5AndMultiple2);
+        $amountModulo5RestMultipleOf2->attach($amountInferiorTo5AndNotMultiple2);
+
+        $strategies = [
+            new AmountEqual10Strategy($amount),
+            $amountSuperior10Strategy,
+            $amountModulo10RestNotZero,
+            $amountEqualTo5,
+            $amountIn5To10IntervallAndMultiple2,
+            $amountIn5To10IntervallAndNotMultiple2,
+            $amountModulo5RestMultipleOf2,
+            $amountInferiorTo5AndMultiple2,
+            $amountInferiorTo5AndNotMultiple2,
+        ];
+
+        /** @var Strategy $item */
+        // @todo encapsulate all this and above to an object like Processor
+        foreach ($strategies as $item) {
+            if ($item->isAppropriate()) {
+                $item->apply($this->change);
+            }
+        }
+
+        if ($this->change->coin2 === self::OPERATION_IMPOSSIBLE) {
             return null;
         }
 
-        $this->change->coin2 = array_sum($this->coin2Collector);
-        $this->change->bill5 = array_sum($this->bill5Collector);
-        $this->change->bill10 = array_sum($this->bill10Collector);
-
         return $this->change;
-    }
-
-    /**
-     * @param int $number
-     * @param int $multipleOf
-     * @return bool
-     * @todo ecapsulate in object and inject
-     */
-    private function multipleOf(int $number, int $multipleOf)
-    {
-        return $number % $multipleOf === 0;
-    }
-
-    /**
-     * @param int $amount
-     * @todo encapsulate
-     */
-    private function collectCoin2(int $amount)
-    {
-        $current = 0;
-
-        $impossible = self::OPERATION_IMPOSSIBLE;
-
-        if ($amount < 5) {
-            $current = intdiv($amount, 2);
-
-            if (false === $this->multipleOf($amount, 2)) {
-                $current = $impossible;
-            }
-        }
-
-        array_push($this->coin2Collector, $current);
-    }
-
-    /**
-     * @param int $amount
-     * @todo encapsulate
-     */
-    private function collectBill5(int $amount)
-    {
-        $current = 0;
-
-        if ($amount === 5) {
-            $current = 1;
-        }
-
-        if ($amount > 5 && $amount < 10) {
-
-            if (true === $this->multipleOf($amount, 2)) {
-                $coin2 = intdiv($amount, 2);
-                array_push($this->coin2Collector, $coin2);
-            } else {
-                $result = $amount % 5;
-                $current = intdiv($amount, 5);
-
-                if (true === $this->multipleOf($result, 2)) {
-                    $this->collectCoin2($result);
-                }
-            }
-        }
-
-        array_push($this->bill5Collector, $current);
-    }
-
-    /**
-     * @param int $amount
-     * @todo encapsulate
-     */
-    private function collectBill10(int $amount)
-    {
-        $current = 0;
-
-        if ($amount === 10) {
-            $current = 1;
-        }
-
-        if ($amount > 10) {
-            $result = $amount % 10;
-            $current = intdiv($amount, 10);
-
-            if ($result !== 0) {
-                $this->collectCoin2($result);
-                $this->collectBill5($result);
-            }
-        }
-
-        array_push($this->bill10Collector, $current);
     }
 }

@@ -18,6 +18,7 @@ class Mk2CalculatorTest extends TestCase
     const COIN_2 = 'coin2';
     const BILL_5 = 'bill5';
     const BILL_10 = 'bill10';
+
     /**
      * @var CalculatorInterface
      */
@@ -54,6 +55,15 @@ class Mk2CalculatorTest extends TestCase
                     self::BILL_10 => 0,
                 ]
             ],
+            'amount10' => [
+                10,
+                [
+                    self::COIN_1 => 0,
+                    self::COIN_2 => 0,
+                    self::BILL_5 => 0,
+                    self::BILL_10 => 1,
+                ]
+            ],
             'amount16' => [
                 16,
                 [
@@ -68,6 +78,15 @@ class Mk2CalculatorTest extends TestCase
                 [
                     self::COIN_1 => 0,
                     self::COIN_2 => 1,
+                    self::BILL_5 => 1,
+                    self::BILL_10 => 1,
+                ]
+            ],
+            'amount15' => [
+                15,
+                [
+                    self::COIN_1 => 0,
+                    self::COIN_2 => 0,
                     self::BILL_5 => 1,
                     self::BILL_10 => 1,
                 ]
@@ -91,9 +110,22 @@ class Mk2CalculatorTest extends TestCase
         $this->assertEquals($expectedCoinsAndBill[self::BILL_10], $change->bill10);
     }
 
-    public function testGetChangeImpossible()
+    public function provideDataForChangeImpossible()
     {
-        $change = $this->calculator->getChange(1);
+        return [
+            'amount1' => [1],
+            'amount3' => [3],
+            'amount11' => [11],
+        ];
+    }
+
+    /**
+     * @param $currentAmount
+     * @dataProvider provideDataForChangeImpossible
+     */
+    public function testGetChangeImpossible($currentAmount)
+    {
+        $change = $this->calculator->getChange($currentAmount);
         $this->assertNull($change);
     }
 }

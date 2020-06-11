@@ -40,12 +40,9 @@ class CalculatorRegistryTest extends TestCase
             ->method('getSupportedModel')
             ->willReturn(CalculatorInterface::MK2_MODEL);
 
-        $this->currentRegistry = new CalculatorRegistry(
-            [
-                $mk1Calculator,
-                $mk2Calculator,
-            ]
-        );
+        $this->currentRegistry = new CalculatorRegistry();
+        $this->currentRegistry->addCalculator($mk1Calculator);
+        $this->currentRegistry->addCalculator($mk2Calculator);
     }
 
     /**

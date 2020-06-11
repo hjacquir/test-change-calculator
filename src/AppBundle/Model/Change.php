@@ -6,6 +6,7 @@ namespace AppBundle\Model;
 
 class Change
 {
+    // @todo make all attribute private and generate getters and setters
     /**
      * @var int
      */
