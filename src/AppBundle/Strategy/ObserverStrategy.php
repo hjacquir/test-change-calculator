@@ -71,7 +71,7 @@ abstract class ObserverStrategy implements Strategy, \SplObserver
         // we save temprary the initial amount
         $previousAmount = $this->getAmount();
         // if observer strategy is called by the subject we have to set the amount before calling isAppropriate()
-        $this->setAmount($subject->getResult());
+        $this->setAmount($subject->getModuloRest());
 
         if ($this->isAppropriate()) {
             $this->apply($subject->getChange());
@@ -84,7 +84,7 @@ abstract class ObserverStrategy implements Strategy, \SplObserver
     /**
      * @return int
      */
-    public function getResult()
+    public function getModuloRest()
     {
         return 0;
     }

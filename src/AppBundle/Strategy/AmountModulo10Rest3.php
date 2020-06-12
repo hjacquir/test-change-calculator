@@ -35,15 +35,15 @@ class AmountModulo10Rest3 implements Strategy
      */
     public function isAppropriate()
     {
-        return $this->getResult() === 3;
+        return $this->getModuloRest() === 3;
     }
 
     /**
      * @return int
      */
-    public function getResult()
+    public function getModuloRest()
     {
-        return $this->amountSuperior10Strategy->getResult();
+        return $this->amountSuperior10Strategy->getModuloRest();
     }
 
     /**

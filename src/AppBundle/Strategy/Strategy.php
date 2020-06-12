@@ -29,5 +29,5 @@ interface Strategy
     /**
      * @return int
      */
-    public function getResult();
+    public function getModuloRest();
 }

@@ -35,7 +35,7 @@ class AmountInferiorTo5AndMultiple2 extends ObserverStrategy
     /**
      * @return int
      */
-    public function getResult()
+    public function getModuloRest()
     {
         return 0;
     }

@@ -52,7 +52,7 @@ class AmountEqual10Strategy implements Strategy
     /**
      * @return int
      */
-    public function getResult()
+    public function getModuloRest()
     {
         return 0;
     }

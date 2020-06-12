@@ -33,15 +33,15 @@ class AmountModulo10RestNotZero extends SubjectStrategy
      */
     public function isAppropriate()
     {
-        return $this->getResult() !== 0
-            && false === in_array($this->getResult(), [1,3]);
+        return $this->getModuloRest() !== 0
+            && false === in_array($this->getModuloRest(), [1,3]);
     }
 
     /**
      * @return int
      */
-    public function getResult()
+    public function getModuloRest()
     {
-        return $this->amountSuperior10Strategy->getResult();
+        return $this->amountSuperior10Strategy->getModuloRest();
     }
 }

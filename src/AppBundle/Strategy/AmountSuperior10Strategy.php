@@ -57,7 +57,7 @@ class AmountSuperior10Strategy implements Strategy
     /**
      * @return int
      */
-    public function getResult(): int
+    public function getModuloRest(): int
     {
         return $this->result;
     }

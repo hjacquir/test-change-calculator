@@ -33,15 +33,15 @@ class AmountModulo5RestMultipleOf2 extends SubjectStrategy
      */
     public function isAppropriate()
     {
-        return $this->getResult() !== 0 &&
-            $this->multipleOf($this->getResult(), 2);
+        return $this->getModuloRest() !== 0 &&
+            $this->multipleOf($this->getModuloRest(), 2);
     }
 
     /**
      * @return int
      */
-    public function getResult()
+    public function getModuloRest()
     {
-        return $this->amountIn5To10IntervallAndNotMultiple2->getResult();
+        return $this->amountIn5To10IntervallAndNotMultiple2->getModuloRest();
     }
 }

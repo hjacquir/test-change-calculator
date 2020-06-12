@@ -43,7 +43,7 @@ class AmountIn5To10IntervallAndNotMultiple2 extends ObserverStrategy
     /**
      * @return int
      */
-    public function getResult()
+    public function getModuloRest()
     {
         return $this->result;
     }
