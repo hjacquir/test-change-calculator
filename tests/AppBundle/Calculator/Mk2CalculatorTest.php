@@ -64,7 +64,7 @@ class Mk2CalculatorTest extends TestCase
                     self::BILL_10 => 1,
                 ]
             ],
-            'amount11' => [
+            'amount21' => [
                 21,
                 [
                     self::COIN_1 => 0,
