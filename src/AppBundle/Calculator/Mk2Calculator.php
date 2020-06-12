@@ -9,6 +9,8 @@
 namespace AppBundle\Calculator;
 
 use AppBundle\Model\Change;
+use AppBundle\Strategy\AmountModulo10Rest1;
+use AppBundle\Strategy\AmountModulo10Rest3;
 use AppBundle\Strategy\Strategy;
 use AppBundle\Strategy\AmountEqual10Strategy;
 use AppBundle\Strategy\AmountSuperior10Strategy;
@@ -79,6 +81,8 @@ class Mk2Calculator implements CalculatorInterface
         $strategies = [
             new AmountEqual10Strategy($amount),
             $amountSuperior10Strategy,
+            new AmountModulo10Rest1($amountSuperior10Strategy),
+            new AmountModulo10Rest3($amountSuperior10Strategy),
             $amountModulo10RestNotZero,
             $amountEqualTo5,
             $amountIn5To10IntervallAndMultiple2,

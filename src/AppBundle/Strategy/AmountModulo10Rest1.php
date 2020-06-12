@@ -8,11 +8,13 @@
 
 namespace AppBundle\Strategy;
 
+use AppBundle\Model\Change;
+
 /**
- * Class AmountModulo10RestNotZero
+ * Class AmountModulo10Rest1
  * @package AppBundle\Strategy
  */
-class AmountModulo10RestNotZero extends SubjectStrategy
+class AmountModulo10Rest1 implements Strategy
 {
     /**
      * @var AmountSuperior10Strategy
@@ -33,8 +35,7 @@ class AmountModulo10RestNotZero extends SubjectStrategy
      */
     public function isAppropriate()
     {
-        return $this->getResult() !== 0
-            && false === in_array($this->getResult(), [1,3]);
+        return $this->getResult() === 1;
     }
 
     /**
@@ -43,5 +44,17 @@ class AmountModulo10RestNotZero extends SubjectStrategy
     public function getResult()
     {
         return $this->amountSuperior10Strategy->getResult();
+    }
+
+    /**
+     * @param Change $change
+     */
+    public function apply(Change $change)
+    {
+        $diff = $this->amountSuperior10Strategy->getAmount() - 11;
+
+        $change->bill10 = intdiv($diff, 10);
+        $change->bill5 = 1;
+        $change->coin2 = 3;
     }
 }

@@ -61,4 +61,12 @@ class AmountSuperior10Strategy implements Strategy
     {
         return $this->result;
     }
+
+    /**
+     * @return int
+     */
+    public function getAmount(): int
+    {
+        return $this->amount;
+    }
 }

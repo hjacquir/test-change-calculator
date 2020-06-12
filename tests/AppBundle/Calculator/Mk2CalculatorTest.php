@@ -64,6 +64,16 @@ class Mk2CalculatorTest extends TestCase
                     self::BILL_10 => 1,
                 ]
             ],
+            'amount11' => [
+                21,
+                [
+                    self::COIN_1 => 0,
+                    self::COIN_2 => 3,
+                    self::BILL_5 => 1,
+                    self::BILL_10 => 1,
+                ]
+            ],
+
             'amount16' => [
                 16,
                 [
@@ -91,7 +101,15 @@ class Mk2CalculatorTest extends TestCase
                     self::BILL_10 => 1,
                 ]
             ],
-
+            'amount53' => [
+                53,
+                [
+                    self::COIN_1 => 0,
+                    self::COIN_2 => 4,
+                    self::BILL_5 => 1,
+                    self::BILL_10 => 4,
+                ]
+            ],
         ];
     }
 
@@ -115,7 +133,6 @@ class Mk2CalculatorTest extends TestCase
         return [
             'amount1' => [1],
             'amount3' => [3],
-            'amount11' => [11],
         ];
     }
 
